@@ -3,7 +3,7 @@ using Minnor.Core.Metadata;
 using Minnor.Core.Sql;
 using System.Linq.Expressions;
 
-namespace Minnor.Core.Queries;
+namespace Minnor.Core.Commands;
 
 public class Query<T> where T : class, new()
 {
@@ -52,7 +52,7 @@ public class Query<T> where T : class, new()
             $" ORDER BY {GetOrderColumnName(mapping)} {(_descending ? "DESC" : "ASC")}" :
             string.Empty;
 
-        var sql = $"SELECT {columns} FROM {table} {whereSql} {orderSql}".Trim();
+        var sql = $"SELECT {columns} FROM [{table}] {whereSql} {orderSql}".Trim();
 
         return ExecuteSelect<T>(sql);
     }
