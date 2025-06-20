@@ -1,11 +1,14 @@
-﻿using System.Linq.Expressions;
+﻿using Minnor.Core.Attributes;
+using Minnor.Core.Utils;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 
 namespace Minnor.Core.Sql;
 
 public class SqlExpressionVisitor : ExpressionVisitor
 {
-    public StringBuilder _sb = new ();
+    public StringBuilder _sb = new();
 
     public string Translate(Expression expression)
     {
@@ -26,6 +29,15 @@ public class SqlExpressionVisitor : ExpressionVisitor
 
     protected override Expression VisitMember(MemberExpression node)
     {
+        if (node.Expression is not null && node.Expression.NodeType == ExpressionType.Parameter)
+        {
+            var propertyInfo = node.Member as PropertyInfo;
+            if (propertyInfo is not null)
+            {
+                _sb.Append(MinnorUtil.GetColumnName(propertyInfo));
+                return node;
+            }
+        }
         _sb.Append(node.Member.Name);
         return node;
     }

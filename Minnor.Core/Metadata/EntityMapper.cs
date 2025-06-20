@@ -1,4 +1,5 @@
 ﻿using Minnor.Core.Attributes;
+using Minnor.Core.Utils;
 using System.Reflection;
 
 namespace Minnor.Core.Metadata;
@@ -17,13 +18,13 @@ public class EntityMapper
         if (_cache.ContainsKey(type))
             return _cache[type];
 
-        var tableName = GetTableName(type);
+        var tableName = MinnorUtil.GetTableName(type);
 
         var columns = type.GetProperties()
             .Where(p => p.CanRead && p.CanWrite)
             .Select(p =>
             {                
-                return (Property: p, ColumnName: GetColumnName(p));
+                return (Property: p, ColumnName: MinnorUtil.GetColumnName(p));
             }).ToList();
 
         var mapping = new EntityMapping
@@ -34,18 +35,6 @@ public class EntityMapper
 
         _cache[type] = mapping;
         return mapping;
-    }
-
-    private static string GetTableName(Type type)
-    {
-        var tableAttribute = type.GetCustomAttribute<TableAttribute>();
-        return tableAttribute?.Name ?? type.Name;
-    }
-
-    public static string GetColumnName(PropertyInfo type)
-    {
-        var tableAttribute = type.GetCustomAttribute<ColumnAttribute>(); 
-        return tableAttribute?.Name ?? type.Name;
     }
     #endregion
 }

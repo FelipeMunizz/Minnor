@@ -1,6 +1,6 @@
 ﻿namespace Minnor.Core.Attributes;
 
-[AttributeUsage(AttributeTargets.Class)]
+[AttributeUsage(AttributeTargets.Property)]
 public class ColumnAttribute : Attribute
 {
     #region Properties

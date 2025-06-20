@@ -30,6 +30,9 @@ public class Query<T> where T : class, new()
 
     public Query<T> OrderBy<TKey>(Expression<Func<T, TKey>> keySelector, bool descending = false)
     {
+        if(keySelector is null)
+            throw new ArgumentNullException(nameof(keySelector));
+
         _orderBy = x => keySelector.Compile()(x);
         _descending = descending;
         return this;
