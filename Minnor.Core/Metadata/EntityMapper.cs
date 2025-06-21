@@ -9,7 +9,7 @@ public class EntityMapper
     #endregion
 
     #region Methods
-    public static EntityMapping GetMapping<T>()
+    internal static EntityMapping GetMapping<T>()
     {
         var type = typeof(T);
 

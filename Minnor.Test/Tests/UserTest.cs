@@ -65,6 +65,31 @@ public class UserTest
     }
     #endregion
 
+    #region Update
+    [Fact]
+    public void Update_ShouldModifyUser()
+    {
+        var user = CreateContext()
+            .Query<User>()
+            .Where(u => u.Id == 1)
+            .ToList()
+            .FirstOrDefault();
+
+        if (user is null)
+        {
+            Assert.Fail("User not found for update test.");
+            return;
+        }
+
+        user.Nome = UsuarioGenerator.GerarUsuario().Nome;
+        var result = CreateContext()
+            .Update<User>(user);
+
+        Assert.True(result is not null && result.Id > 0);
+        Assert.Equal(user.Nome, result.Nome);
+    }
+    #endregion
+
     private MiniOrmContext CreateContext() => 
         new MiniOrmContext(_connectionString);
     

@@ -6,21 +6,21 @@ using System.Reflection;
 
 namespace Minnor.Core.Commands;
 
-public class Insert<T> where T : class, new()
+internal class Insert<T> where T : class, new()
 {
     #region Properties
     private readonly string _connectionString;
     #endregion
 
     #region Constructors
-    public Insert(string connectionString)
+    internal Insert(string connectionString)
     {
         _connectionString = connectionString;
     }
     #endregion
 
     #region Methods
-    public T ExecuteInsert(T entity)
+    internal T ExecuteInsert(T entity)
     {
         if (entity is null)
             throw new ArgumentNullException(nameof(entity));
@@ -38,11 +38,8 @@ public class Insert<T> where T : class, new()
         return entity;
     }
 
-    private InsertParams CreateInsert(T entity)
+    private SqlParams CreateInsert(T entity)
     {
-        if (entity is null)
-            throw new ArgumentNullException(nameof(entity));
-
         var type = typeof(T);
 
         var mapping = EntityMapper.GetMapping<T>();
@@ -81,7 +78,7 @@ public class Insert<T> where T : class, new()
                        SELECT SCOPE_IDENTITY();
                    """;
 
-        return new InsertParams
+        return new SqlParams
         {
             Sql = sql,
             SqlParameters = sqlParameters,

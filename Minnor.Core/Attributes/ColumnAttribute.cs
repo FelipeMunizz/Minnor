@@ -1,14 +1,14 @@
 ﻿namespace Minnor.Core.Attributes;
 
 [AttributeUsage(AttributeTargets.Property)]
-public class ColumnAttribute : Attribute
+internal class ColumnAttribute : Attribute
 {
     #region Properties
-    public string Name { get; set; }
+    internal string Name { get; set; }
     #endregion
 
     #region Constructors
-    public ColumnAttribute(string name)
+    internal ColumnAttribute(string name)
     {
         Name = name;
     }

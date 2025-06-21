@@ -20,4 +20,9 @@ public class MiniOrmContext
     {
         return new Insert<T>(_connectionString).ExecuteInsert(entity);
     }
+
+    public T Update<T>(T entity) where T : class, new()
+    {
+        return new Update<T>(_connectionString).ExecuteUpdate(entity);
+    }
 }

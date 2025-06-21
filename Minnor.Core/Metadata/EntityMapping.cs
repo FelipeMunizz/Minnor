@@ -2,10 +2,10 @@
 
 namespace Minnor.Core.Metadata;
 
-public class EntityMapping
+internal class EntityMapping
 {
     #region Properties
-    public string TableName { get; set; }
-    public List<(PropertyInfo Property, string ColumnName)> Columns { get; set; }
+    internal string TableName { get; set; }
+    internal List<(PropertyInfo Property, string ColumnName)> Columns { get; set; }
     #endregion
 }

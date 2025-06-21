@@ -5,11 +5,11 @@ using System.Text;
 
 namespace Minnor.Core.Sql;
 
-public class SqlExpressionVisitor : ExpressionVisitor
+internal class SqlExpressionVisitor : ExpressionVisitor
 {
-    public StringBuilder _sb = new();
+    internal StringBuilder _sb = new();
 
-    public string Translate(Expression expression)
+    internal string Translate(Expression expression)
     {
         Visit(expression);
         return $"WHERE {_sb.ToString()}";
