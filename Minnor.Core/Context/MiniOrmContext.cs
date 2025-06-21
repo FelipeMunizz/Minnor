@@ -25,4 +25,9 @@ public class MiniOrmContext
     {
         return new Update<T>(_connectionString).ExecuteUpdate(entity);
     }
+
+    public bool Delete<T>(T entity) where T : class, new()
+    {
+        return new Delete<T>(_connectionString).ExecuteDelete(entity);
+    }
 }

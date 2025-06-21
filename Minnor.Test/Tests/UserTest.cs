@@ -90,6 +90,25 @@ public class UserTest
     }
     #endregion
 
+    #region Delete
+    [Fact]
+    public void Delete_ShouldRemoveUser()
+    {
+        var user = CreateContext()
+            .Query<User>()
+            .ToList();
+        if (user is null)
+        {
+            Assert.Fail("User not found for delete test.");
+            return;
+        }
+        var result = CreateContext()
+            .Delete<User>(user[user.Count - 1]);
+
+        Assert.True(result);
+    }
+    #endregion
+
     private MiniOrmContext CreateContext() => 
         new MiniOrmContext(_connectionString);
     
