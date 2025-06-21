@@ -1,5 +1,4 @@
-﻿using Minnor.Core.Attributes;
-using Minnor.Core.Utils;
+﻿using Minnor.Core.Utils;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;

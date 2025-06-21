@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace Minnor.Core.Commands;
 
-public class Query<T> where T : class, new()
+public class Select<T> where T : class, new()
 {
     #region Properties
     private readonly string _connectionString;
@@ -15,20 +15,20 @@ public class Query<T> where T : class, new()
     #endregion
 
     #region Constructors
-    public Query(string connectionString)
+    public Select(string connectionString)
     {
         _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
     }
     #endregion
 
     #region Methods
-    public Query<T> Where(Expression<Func<T, bool>> expression)
+    public Select<T> Where(Expression<Func<T, bool>> expression)
     {
         _whereExpression = expression;
         return this;
     }
 
-    public Query<T> OrderBy<TKey>(Expression<Func<T, TKey>> keySelector, bool descending = false)
+    public Select<T> OrderBy<TKey>(Expression<Func<T, TKey>> keySelector, bool descending = false)
     {
         if(keySelector is null)
             throw new ArgumentNullException(nameof(keySelector));

@@ -11,13 +11,13 @@ public class MiniOrmContext
         _connectionString = connectionString;
     }
 
-    public Query<T> Query<T>() where T : class, new()
+    public Select<T> Query<T>() where T : class, new()
     {
-        return new Query<T>(_connectionString);
+        return new Select<T>(_connectionString);
     }
 
     public T Insert<T>(T entity) where T : class, new()
     {
-        return new Insert<T>(_connectionString).CreateInsert(entity);
+        return new Insert<T>(_connectionString).ExecuteInsert(entity);
     }
 }

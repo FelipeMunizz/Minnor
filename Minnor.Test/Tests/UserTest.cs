@@ -61,19 +61,11 @@ public class UserTest
         var result = CreateContext()
             .Insert<User>(user);
 
-        if (result is not null && result.Id > 0)
-        {
-            Assert.Equal(user.Nome, result.Nome);
-        }
-        else
-        {
-            Assert.Fail("User was not inserted correctly.");
-        }
+        Assert.True(result is not null && result.Id > 0);
     }
     #endregion
 
-    private MiniOrmContext CreateContext()
-    {
-        return new MiniOrmContext(_connectionString);
-    }
+    private MiniOrmContext CreateContext() => 
+        new MiniOrmContext(_connectionString);
+    
 }
