@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Company>FelipeMuniz</Company>
+    <Company>FeMuniz</Company>
     <Description>Mini ORM </Description>
   </PropertyGroup>
 
