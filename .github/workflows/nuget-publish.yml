@@ -27,5 +27,15 @@ jobs:
       - name: Pack NuGet package
         run: dotnet pack --no-build --configuration Release -o ./nupkgs
 
+      - name: Debug – List .nupkg files
+        run: |
+          echo "Current directory: $(pwd)"
+          dir -Recurse
+
       - name: Push to NuGet.org
-        run: dotnet nuget push ./Minnor/Minnor/nupkgs/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+        run: |
+          $package = Get-ChildItem -Recurse -Filter *.nupkg | Select-Object -First 1
+          Write-Host "Found package: $($package.FullName)"
+          dotnet nuget push "$($package.FullName)" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+        shell: pwsh
+
