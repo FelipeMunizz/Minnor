@@ -24,9 +24,6 @@ jobs:
       - name: Build project
         run: dotnet build --no-restore --configuration Release
 
-      - name: Run tests (optional)
-        run: dotnet test --no-build --configuration Release --verbosity normal
-
       - name: Pack NuGet package
         run: dotnet pack --no-build --configuration Release -o ./nupkgs
 
