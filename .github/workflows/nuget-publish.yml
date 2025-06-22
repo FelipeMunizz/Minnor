@@ -28,7 +28,4 @@ jobs:
         run: dotnet pack --no-build --configuration Release -o ./nupkgs
 
       - name: Push to NuGet.org
-        working-directory: ./nupkgs
-        run: |
-          for $f in *.nupkg; do dotnet nuget push "$f" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate; done
-        shell: bash
+        run: dotnet nuget push ./Minnor/Minnor/nupkgs/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
