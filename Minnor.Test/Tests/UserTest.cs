@@ -50,6 +50,19 @@ public class UserTest
             Assert.True(result.Count > 0);
         }
     }
+
+    [Fact]
+    public void Include_ShouldLoadRelatedDocuments()
+    {
+        var result = CreateContext()
+            .Query<User>()
+            .Where(u => u.Id == 2)
+            .Include(u => u.Documents)
+            .ToList();
+
+        Assert.NotNull(result);
+        Assert.All(result, u => Assert.NotEmpty(u.Documents));
+    }
     #endregion
 
     #region Insert

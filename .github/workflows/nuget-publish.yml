@@ -38,4 +38,3 @@ jobs:
           Write-Host "Found package: $($package.FullName)"
           dotnet nuget push "$($package.FullName)" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
         shell: pwsh
-

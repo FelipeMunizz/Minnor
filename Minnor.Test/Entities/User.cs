@@ -11,4 +11,6 @@ public class User
     public string Senha { get; set; }
 
     public string Nome { get; set; }
+
+    public ICollection<Document> Documents { get; set; } = new List<Document>();
 }

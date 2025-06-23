@@ -39,7 +39,7 @@ internal class Update<T> where T : class, new()
     {
         var type = typeof(T);
 
-        var mapping = EntityMapper.GetMapping<T>();
+        var mapping = EntityMapper.GetMapping(type);
 
         var columnsAndParameters = new Dictionary<string, string>();
         var sqlParameters = new List<SqlParameter>();

@@ -13,6 +13,14 @@ public class EntityMapper
     {
         var type = typeof(T);
 
+        return GetMappingInternal(type);
+    }
+
+    internal static EntityMapping GetMapping(Type type) =>
+        GetMappingInternal(type, isMappadColumn: true);
+
+    private static EntityMapping GetMappingInternal(Type type, bool isMappadColumn = false)
+    {
         if (_cache.ContainsKey(type))
             return _cache[type];
 
@@ -21,7 +29,15 @@ public class EntityMapper
         var columns = type.GetProperties()
             .Where(p => p.CanRead && p.CanWrite)
             .Select(p =>
-            {                
+            {
+                return (Property: p, ColumnName: MinnorUtil.GetColumnName(p));
+            }).ToList();
+
+        if (isMappadColumn)
+            columns = type.GetProperties()
+            .Where(p => p.CanRead && p.CanWrite && MinnorUtil.IsMappedColumn(p))
+            .Select(p =>
+            {
                 return (Property: p, ColumnName: MinnorUtil.GetColumnName(p));
             }).ToList();
 

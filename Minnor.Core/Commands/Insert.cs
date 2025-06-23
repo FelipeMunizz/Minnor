@@ -42,7 +42,7 @@ internal class Insert<T> where T : class, new()
     {
         var type = typeof(T);
 
-        var mapping = EntityMapper.GetMapping<T>();
+        var mapping = EntityMapper.GetMapping(type);
 
         var columns = new List<string>();
         var parameters = new List<string>();
