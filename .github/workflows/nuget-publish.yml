@@ -27,6 +27,11 @@ jobs:
       - name: Pack NuGet package
         run: dotnet pack --no-build --configuration Release -o ./nupkgs
 
+      - name: Debug – List .nupkg files
+        run: |
+          echo "Current directory: $(pwd)"
+          dir -Recurse
+
       - name: Push to NuGet.org
         run: |
           $package = Get-ChildItem -Recurse -Filter *.nupkg | Select-Object -First 1
