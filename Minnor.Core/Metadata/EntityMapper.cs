@@ -4,10 +4,6 @@ namespace Minnor.Core.Metadata;
 
 public class EntityMapper
 {
-    #region Properties
-    private static readonly Dictionary<Type, EntityMapping> _cache = new();
-    #endregion
-
     #region Methods
     internal static EntityMapping GetMapping<T>()
     {
@@ -21,9 +17,6 @@ public class EntityMapper
 
     private static EntityMapping GetMappingInternal(Type type, bool isMappadColumn = false)
     {
-        if (_cache.ContainsKey(type))
-            return _cache[type];
-
         var tableName = MinnorUtil.GetTableName(type);
 
         var columns = type.GetProperties()
@@ -47,7 +40,6 @@ public class EntityMapper
             Columns = columns
         };
 
-        _cache[type] = mapping;
         return mapping;
     }
     #endregion

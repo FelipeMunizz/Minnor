@@ -3,7 +3,6 @@ using Minnor.Core.Attributes;
 using Minnor.Core.Metadata;
 using Minnor.Core.Sql;
 using Minnor.Core.Utils;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
