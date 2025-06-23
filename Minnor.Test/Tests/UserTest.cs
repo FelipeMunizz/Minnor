@@ -1,4 +1,5 @@
 ﻿using Minnor.Core.Context;
+using Minnor.Core.Extensions;
 using Minnor.Test.Entities;
 using Minnor.Test.Helpers;
 
@@ -62,6 +63,18 @@ public class UserTest
 
         Assert.NotNull(result);
         Assert.All(result, u => Assert.NotEmpty(u.Documents));
+    }
+
+    [Fact]
+    public void CustomQuery_ShouldReturnUsersWithCustomSql()
+    {
+        var sql = "SELECT [Id], [Nome] FROM [User] WHERE [Id] = 2";
+        var result = CreateContext()
+            .Query<UserDTO>()
+            .CustomQuery(sql);
+
+        Assert.NotNull(result);
+        Assert.True(result.Count > 0);
     }
     #endregion
 
