@@ -2,11 +2,11 @@
 
 namespace Minnor.Core.Context;
 
-public class MiniOrmContext
+public class MinnorContext
 {
     private readonly string _connectionString;
 
-    public MiniOrmContext(string connectionString)
+    public MinnorContext(string connectionString)
     {
         _connectionString = connectionString;
     }

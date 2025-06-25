@@ -4,6 +4,48 @@
 
 ---
 
+## 🆕 Versão 1.0.5 - Novidade: Suporte a Injeção de Dependências
+
+### ✨ O que há de novo?
+
+- ✅ Suporte completo à **injeção de dependência (DI)** com `IServiceCollection`
+- ✅ Registro fluente via `AddMinnor(...)`
+- ✅ Facilita o uso do `MinnorContext` em projetos ASP.NET Core, Worker Services e outros projetos baseados em DI.
+- ✅ Suporte completo à **injeção de dependência (DI)** com `IServiceCollection`
+- ✅ Registro fluente via `AddMinnor(...)`
+- ✅ Facilita o uso do `MinnorContext` em projetos ASP.NET Core, Worker Services e outros projetos baseados em DI.
+
+### Exemplo de uso
+
+Para registrar o `MinnorContext` no seu projeto, basta adicionar o seguinte código no método `ConfigureServices` da sua classe `Startup`:
+```csharp
+builder.Services.AddMinnor(options =>
+{
+    options.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+});
+```
+Na sua classe de serviço:
+
+```csharp
+public class ClienteService
+{
+    private readonly MinnorContext _context;
+
+    public ClienteService(MinnorContext context)
+    {
+        _context = context;
+    }
+
+    public void CriarCliente()
+    {
+        var cliente = new Cliente { Nome = "Maria" };
+        _context.Insert(cliente);
+    }
+}
+```
+
+---
+
 ## 🆕 Versão 1.0.4 - Novidade: Suporte a Queries SQL Personalizadas
 
 ### ✨ O que há de novo?
@@ -23,7 +65,7 @@ A nova versão do **Minnor** agora permite executar **queries SQL personalizadas
 Você pode fornecer a query completa como string e informar o tipo de retorno esperado (entidade ou DTO):
 
 ```csharp
-var resultado = context.Query<PedidoDTO>(
+var resultado = context.Query<PedidoDTO>().CustomQuery(
     "SELECT p.Id, p.Data, c.Nome AS ClienteNome " +
     "FROM Pedidos p INNER JOIN Clientes c ON c.Id = p.ClienteId"
 ).ToList();
