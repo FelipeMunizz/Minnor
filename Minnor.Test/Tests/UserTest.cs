@@ -135,7 +135,7 @@ public class UserTest
     }
     #endregion
 
-    private MiniOrmContext CreateContext() => 
-        new MiniOrmContext(_connectionString);
+    private MinnorContext CreateContext() => 
+        new MinnorContext(_connectionString);
     
 }
