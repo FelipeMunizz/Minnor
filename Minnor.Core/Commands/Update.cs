@@ -9,13 +9,15 @@ namespace Minnor.Core.Commands;
 internal class Update<T> where T : class, new()
 {
 	#region Properties
-	private readonly string _connectionString;
+	private readonly SqlConnection _connection;
+    private SqlTransaction? _transaction;
     #endregion
 
     #region Constructors
-    internal Update(string connectionString)
+    internal Update(SqlConnection connection, SqlTransaction? transaction)
     {
-        _connectionString = connectionString;
+        _connection = connection;
+        _transaction = transaction;
     }
     #endregion
 
@@ -90,10 +92,7 @@ internal class Update<T> where T : class, new()
     {
         try
         {
-            using var connection = new SqlConnection(_connectionString);
-            connection.Open();
-
-            using var command = new SqlCommand(sql, connection);
+            using var command = new SqlCommand(sql, _connection, _transaction);
             command.Parameters.AddRange(sqlParameters.ToArray());
 
             return command.ExecuteNonQuery();
