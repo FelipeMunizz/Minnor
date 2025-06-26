@@ -4,6 +4,31 @@
 
 ---
 
+## 🆕 Versão 1.0.6 - Novidade: Suporte a Transações
+
+### ✨ O que há de novo?
+
+- ✅ Suporte completo a **transações** com o `MinnorContext`
+
+### Exemplo de uso
+
+```csharp
+try
+{
+    context.BeginTransaction();
+
+    context.Insert(new Usuario { Nome = "Maria" });
+    context.Insert(new Pedido { UsuarioId = 1, Valor = 150 });
+
+    context.Commit(); // Salva as alterações no banco
+}
+catch
+{
+    context.Rollback(); // Cancela tudo se houver erro
+}
+```
+---
+
 ## 🆕 Versão 1.0.5 - Novidade: Suporte a Injeção de Dependências
 
 ### ✨ O que há de novo?
