@@ -37,13 +37,19 @@ internal class SqlExpressionVisitor : ExpressionVisitor
                 return node;
             }
         }
-        _sb.Append(node.Member.Name);
+
+        var value = GetValue(node);
+        if (value is string || value is DateTime)
+            _sb.Append($"'{value}'");
+        else
+            _sb.Append(value);
+
         return node;
     }
 
     protected override Expression VisitConstant(ConstantExpression node)
     {
-        if (node.Type == typeof(string))
+        if (node.Type == typeof(string) || node.Type == typeof(DateTime))
             _sb.Append($"'{node.Value}'");
         else
             _sb.Append(node.Value);
@@ -75,4 +81,28 @@ internal class SqlExpressionVisitor : ExpressionVisitor
         ExpressionType.OrElse => "OR",
         _ => throw new NotSupportedException($"Operador {type} não suportado")
     };
+
+    private static object? GetValue(MemberExpression member)
+    {
+        if (member.Expression is ConstantExpression constant)
+        {
+            var fieldInfo = member.Member as FieldInfo;
+            return fieldInfo?.GetValue(constant.Value);
+        }
+
+        if (member.Expression is MemberExpression innerMember)
+        {
+            var innerValue = GetValue(innerMember);
+            if (innerValue == null) return null;
+
+            if (member.Member is FieldInfo fi)
+                return fi.GetValue(innerValue);
+            if (member.Member is PropertyInfo pi)
+                return pi.GetValue(innerValue);
+        }
+
+        var objectMember = Expression.Convert(member, typeof(object));
+        var getterLambda = Expression.Lambda<Func<object>>(objectMember);
+        return getterLambda.Compile().Invoke();
+    }
 }
