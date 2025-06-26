@@ -11,7 +11,7 @@ namespace Minnor.Core.Commands;
 public class Select<T> where T : class, new()
 {
     #region Properties
-    private readonly string _connectionString;
+    private readonly SqlConnection _connection;
     private Expression<Func<T, bool>>? _whereExpression;
     private Func<T, object>? _orderBy;
     private bool _descending;
@@ -19,9 +19,9 @@ public class Select<T> where T : class, new()
     #endregion
 
     #region Constructors
-    public Select(string connectionString)
+    public Select(SqlConnection connection)
     {
-        _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
+        _connection = connection ?? throw new ArgumentNullException(nameof(connection));
     }
     #endregion
 
@@ -120,10 +120,7 @@ public class Select<T> where T : class, new()
                     WHERE [{navKey.ColumnName}] = @ForeignKeyValue
             ";
 
-            using var conn = new SqlConnection(_connectionString);
-            conn.Open();
-
-            using var cmd = new SqlCommand(command, conn);
+            using var cmd = new SqlCommand(command, _connection);
             cmd.Parameters.AddWithValue("@ForeignKeyValue", fkValue);
 
             using var reader = cmd.ExecuteReader();
@@ -184,9 +181,7 @@ public class Select<T> where T : class, new()
 
         var children = new List<object>();
 
-        using var conn = new SqlConnection(_connectionString);
-        conn.Open();
-        using var cmd = new SqlCommand(sql, conn);
+        using var cmd = new SqlCommand(sql, _connection);
 
         for (int i = 0; i < parentIds.Count; i++)
             cmd.Parameters.AddWithValue(paramNames[i], parentIds[i]);
@@ -236,10 +231,7 @@ public class Select<T> where T : class, new()
         var mapping = EntityMapper.GetMapping<T>();
         var result = new List<T>();
 
-        using var conn = new SqlConnection(_connectionString);
-        conn.Open();
-
-        using var cmd = new SqlCommand(command, conn);
+        using var cmd = new SqlCommand(command, _connection);
         using var reader = cmd.ExecuteReader();
 
         var selectedColumns = mapping.Columns.Where(c => !MinnorUtil.IsCollectionProperty(c.Property)).ToList();

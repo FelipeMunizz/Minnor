@@ -13,27 +13,24 @@ public static class SelectExtension
             throw new ArgumentNullException(nameof(query));
 
         var connectionStringField = typeof(Select<T>)
-            .GetField("_connectionString", BindingFlags.NonPublic | BindingFlags.Instance);
+            .GetField("_connection", BindingFlags.NonPublic | BindingFlags.Instance);
 
         if (connectionStringField is null)
             throw new InvalidOperationException("Connection string field not found in Select<T>.");
 
-        var connectionString = connectionStringField.GetValue(_) as string;
+        var connection = connectionStringField.GetValue(_) as SqlConnection;
 
-        return ExecuteCustomQuery<T>(query, connectionString ?? 
+        return ExecuteCustomQuery<T>(query, connection ?? 
             throw new InvalidOperationException("Connection string is null."));
     }
 
-    private static List<T> ExecuteCustomQuery<T>(string sql, string connectionString) where T : class, new()
+    private static List<T> ExecuteCustomQuery<T>(string sql, SqlConnection connection) where T : class, new()
     {
         var result = new List<T>();
         var mapping = EntityMapper.GetMapping<T>();
         var columnToPropertyMap = mapping.Columns.ToDictionary(c => c.ColumnName.ToLower(), c => c.Property);
 
-        using var conn = new SqlConnection(connectionString);
-        conn.Open();
-
-        using var cmd = new SqlCommand(sql, conn);
+        using var cmd = new SqlCommand(sql, connection);
         using var reader = cmd.ExecuteReader();
 
         var columnNames = Enumerable.Range(0, reader.FieldCount)

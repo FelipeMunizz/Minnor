@@ -8,10 +8,12 @@ namespace Minnor.Core.Commands;
 
 internal class Delete<T> where T : class, new()
 {
-    private readonly string _connectionString;
-    internal Delete(string connectionString)
+    private readonly SqlConnection _connection;
+    private SqlTransaction? _transaction;
+    internal Delete(SqlConnection connectionString, SqlTransaction? transaction)
     {
-        _connectionString = connectionString;
+        _connection = connectionString;
+        _transaction = transaction;
     }
 
     internal bool ExecuteDelete(T entity)
@@ -51,10 +53,7 @@ internal class Delete<T> where T : class, new()
     {
         try
         {
-            using var connection = new SqlConnection(_connectionString);
-            connection.Open();
-
-            using var command = new SqlCommand(sql, connection);
+            using var command = new SqlCommand(sql, _connection, _transaction);
             command.Parameters.Add(identityParameter);
 
             return command.ExecuteNonQuery();
