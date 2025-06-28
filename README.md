@@ -4,6 +4,40 @@
 
 ---
 
+## 🆕 Versão 1.0.8 - Novidade: Método `FirstOrDefault` com Suporte a Expressões Lambda
+
+### ✨ O que há de novo?
+A nova versão do Minnor introduz o método `FirstOrDefault`, que permite recuperar o primeiro registro de uma entidade diretamente com um predicado opcional.
+
+Agora ficou mais simples buscar um único item da base de dados com performance e clareza, sem necessidade de carregar listas inteiras ou escrever SQL manualmente.
+
+### Exemplo de uso
+```csharp
+// Retorna o primeiro usuário com Id = 2
+var usuario = context.Query<Usuario>()
+    .FirstOrDefault(u => u.Id == 2);
+
+// Retorna o primeiro usuário da tabela
+var primeiroUsuario = context.Query<Usuario>()
+    .FirstOrDefault();
+```
+
+### ⚙️ Como funciona?
+
+- Traduz o predicado para SQL usando SqlExpressionVisitor.
+
+- Gera dinamicamente o SELECT TOP 1 com as colunas da entidade.
+
+- Executa o comando diretamente via SqlCommand e popula a instância da entidade.
+
+- Ignora propriedades de navegação/coleções no mapeamento.
+
+---
+
+## 🆕 Versão 1.0.7 - Correções e Melhorias
+
+---
+
 ## 🆕 Versão 1.0.6 - Novidade: Suporte a Transações
 
 ### ✨ O que há de novo?

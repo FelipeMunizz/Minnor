@@ -1,5 +1,5 @@
 ﻿using Minnor.Core.Context;
-using Minnor.Core.Extensions;
+using Minnor.Core.Extensions.SelectExtension;
 using Minnor.Test.Entities;
 using Minnor.Test.Helpers;
 
@@ -75,6 +75,23 @@ public class UserTest
 
         Assert.NotNull(result);
         Assert.True(result.Count > 0);
+    }
+
+    [Fact]
+    public void FirstOrDefault_ShouldReturnSingleUser()
+    {
+        var user = CreateContext()
+            .Query<User>()
+            .FirstOrDefault(u => u.Id == 2);
+
+        var user1 = CreateContext()
+            .Query<User>()
+            .FirstOrDefault();
+
+        Assert.NotNull(user);
+        Assert.NotNull(user1);
+        Assert.Equal(1, user1.Id);
+        Assert.Equal(2, user.Id);
     }
     #endregion
 
@@ -162,7 +179,7 @@ public class UserTest
     public void Update_WithTransaction_ShouldCommit()
     {
         using var ctx = CreateContext();
-        var user = ctx.Query<User>().ToList().FirstOrDefault();
+        var user = ctx.Query<User>().FirstOrDefault();
         Assert.NotNull(user);
 
         var novoNome = UsuarioGenerator.GerarUsuario().Nome;
@@ -182,7 +199,7 @@ public class UserTest
     public void Update_WithTransaction_ShouldRollback()
     {
         using var ctx = CreateContext();
-        var user = ctx.Query<User>().ToList().FirstOrDefault();
+        var user = ctx.Query<User>().FirstOrDefault();
         Assert.NotNull(user);
 
         var originalNome = user.Nome;
