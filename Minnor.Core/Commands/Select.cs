@@ -173,11 +173,15 @@ public class Select<T> where T : class, new()
 
         var parentIds = parentIdToEntity.Keys.Where(id => id != null).Distinct().ToList();
 
+        var columns = string.Join(",", navMapping.Columns
+            .Where(c => !MinnorUtil.IsCollectionProperty(c.Property))
+            .Select(c => c.ColumnName));
+
         if (!parentIds.Any()) return;
 
         // Monta lista de parâmetros
         var paramNames = parentIds.Select((id, index) => $"@p{index}").ToList();
-        var sql = $"SELECT * FROM [{navMapping.TableName}] WHERE [{fkColumn}] IN ({string.Join(",", paramNames)})";
+        var sql = $"SELECT {columns} FROM [{navMapping.TableName}] WHERE [{fkColumn}] IN ({string.Join(",", paramNames)})";
 
         var children = new List<object>();
 
