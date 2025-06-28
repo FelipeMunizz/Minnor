@@ -3,9 +3,9 @@ using Minnor.Core.Commands;
 using Minnor.Core.Metadata;
 using System.Reflection;
 
-namespace Minnor.Core.Extensions;
+namespace Minnor.Core.Extensions.SelectExtension;
 
-public static class SelectExtension
+public static class CustomQueryExtension
 {
     public static List<T> CustomQuery<T>(this Select<T> _, string query) where T : class, new()
     {
