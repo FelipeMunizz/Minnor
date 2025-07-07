@@ -3,6 +3,26 @@
 **Minnor.Core** é um micro ORM (Object-Relational Mapper) minimalista e leve para .NET, projetado para fornecer uma camada simples e expressiva de mapeamento entre objetos C# e bancos de dados relacionais. Ideal para quem busca controle direto sobre SQL, mas com uma estrutura mais organizada que o `Dapper` puro.
 
 ---
+## 🆕 Versão 1.0.10 - Novidade: Método para Inserção em Lotes
+
+### ✨ O que há de novo?
+A nova versão do Minnor agora inclui um método para inserção em lotes, permitindo inserir várias entidades de uma só vez com performance otimizada.
+#### Exemplo de uso
+```csharp
+var lista = new List<MinhaClasse>
+    {
+        new MinhaClasse { Nome = "Item 1", Valor = 100 },
+        new MinhaClasse { Nome = "Item 2", Valor = 200 }
+    };
+
+var results = context.InsertRange<MinhaClasse>(lista);
+```
+
+---
+
+## 🆕 Versão 1.0.9 - Correções e Melhorias
+
+---
 
 ## 🆕 Versão 1.0.8 - Novidade: Método `FirstOrDefault` com Suporte a Expressões Lambda
 
