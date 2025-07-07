@@ -1,4 +1,5 @@
 ﻿using Minnor.Core.Context;
+using Minnor.Core.Extensions.ContextExtension;
 using Minnor.Core.Extensions.SelectExtension;
 using Minnor.Test.Entities;
 using Minnor.Test.Helpers;
@@ -148,6 +149,22 @@ public class UserTest
             .FirstOrDefault();
 
         Assert.Null(fetched); // Não foi persistido
+    }
+
+    [Fact]
+    public void InsertRange_ShouldAddMultipleUsers()
+    {
+        var users = new List<User>
+        {
+            UsuarioGenerator.GerarUsuario(),
+            UsuarioGenerator.GerarUsuario(),
+            UsuarioGenerator.GerarUsuario()
+        };
+        var results = CreateContext().InsertRange<User>(users);
+
+        Assert.NotNull(results);
+        Assert.Equal(users.Count, results.Count());
+        Assert.All(results, u => Assert.True(u.Id > 0));
     }
     #endregion
 
