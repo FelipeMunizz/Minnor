@@ -3,6 +3,22 @@
 **Minnor.Core** é um micro ORM (Object-Relational Mapper) minimalista e leve para .NET, projetado para fornecer uma camada simples e expressiva de mapeamento entre objetos C# e bancos de dados relacionais. Ideal para quem busca controle direto sobre SQL, mas com uma estrutura mais organizada que o `Dapper` puro.
 
 ---
+
+## 🆕 Versão 1.1.0 - Novidade: Suporte a Paginação
+
+### ✨ O que há de novo?
+A nova versão do Minnor agora inclui para paginação de resultados, permitindo que você obtenha subconjuntos de dados de forma eficiente e controlada.
+#### Exemplo de uso
+```csharp
+var pageIndex = 0;
+var pageSize = 2;
+
+var pagedUsers = CreateContext()
+    .Query<User>()
+    .Page(pageIndex, pageSize)
+    .ToList();
+```
+---
 ## 🆕 Versão 1.0.10 - Novidade: Método para Inserção em Lotes
 
 ### ✨ O que há de novo?

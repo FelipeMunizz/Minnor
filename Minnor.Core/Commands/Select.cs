@@ -16,6 +16,8 @@ public class Select<T> where T : class, new()
     private Func<T, object>? _orderBy;
     private bool _descending;
     private List<string> _includes = new();
+    private int? _skip;
+    private int? _take;
     #endregion
 
     #region Constructors
@@ -26,6 +28,16 @@ public class Select<T> where T : class, new()
     #endregion
 
     #region Methods
+    internal Select<T> Skip(int count)
+    {
+        _skip = count;
+        return this;
+    }
+    internal Select<T> Take(int count)
+    {
+        _take = count;
+        return this;
+    }
     public Select<T> Where(Expression<Func<T, bool>> expression)
     {
         _whereExpression = expression;
@@ -65,9 +77,11 @@ public class Select<T> where T : class, new()
 
         var orderSql = _orderBy is not null ?
             $" ORDER BY {GetOrderColumnName(mapping)} {(_descending ? "DESC" : "ASC")}" :
-            string.Empty;
+            $" ORDER BY {mapping.Columns.FirstOrDefault(x => MinnorUtil.IsPrimaryKey(x.Property, x.Property.PropertyType)).ColumnName} {(_descending ? "DESC" : "ASC")}";
 
         var sql = $"SELECT {columns} FROM [{table}] {whereSql} {orderSql}".Trim();
+
+        sql += GetStrPagination();
 
         var list = ExecuteSelect<T>(sql);
 
@@ -75,6 +89,20 @@ public class Select<T> where T : class, new()
             LoadIncludes(list);
 
         return list;
+    }
+
+    private string GetStrPagination()
+    {
+        string sql = string.Empty;
+        if (_skip.HasValue || _take.HasValue)
+        {
+            sql += $" OFFSET {_skip.GetValueOrDefault(0)} ROWS";
+
+            if (_take.HasValue)
+                sql += $" FETCH NEXT {_take.Value} ROWS ONLY";
+        }
+
+        return sql;
     }
 
     private void LoadIncludes(List<T> entities)

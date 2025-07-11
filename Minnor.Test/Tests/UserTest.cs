@@ -94,6 +94,21 @@ public class UserTest
         Assert.Equal(1, user1.Id);
         Assert.Equal(2, user.Id);
     }
+
+    [Fact]
+    public void Pagination_ShouldReturnPagedResults()
+    {
+        var pageIndex = 0;
+        var pageSize = 2;
+
+        var pagedUsers = CreateContext()
+            .Query<User>()
+            .Page(pageIndex, pageSize)
+            .ToList();
+
+        Assert.NotNull(pagedUsers);
+        Assert.True(pagedUsers.Count <= pageSize);
+    }
     #endregion
 
     #region Insert
